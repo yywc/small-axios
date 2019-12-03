@@ -1,4 +1,4 @@
-import { isDate, isObject, isEmpty, isArray } from './util'
+import { isDate, isObject, isDef, isArray } from './util'
 
 function encode(val: string): string {
   return encodeURI(val)
@@ -23,7 +23,7 @@ function formatValue(value: any, key: string): [any[], string] {
 }
 
 export default function buildURL(url: string, params?: any): string {
-  if (isEmpty(params)) {
+  if (!isDef(params)) {
     return url
   }
 
@@ -31,7 +31,7 @@ export default function buildURL(url: string, params?: any): string {
 
   Object.keys(params).forEach((key) => {
     let value = params[key]
-    if (isEmpty(value)) {
+    if (!isDef(value)) {
       return
     }
     // 格式化 key、value
@@ -48,7 +48,7 @@ export default function buildURL(url: string, params?: any): string {
   })
   // 组合参数
   const serializedParams = parts.join('&')
-  if (!isEmpty(serializedParams)) {
+  if (isDef(serializedParams)) {
     // 去除 hash 部分
     const hashIndex = url.indexOf('#')
     if (hashIndex !== -1) {
