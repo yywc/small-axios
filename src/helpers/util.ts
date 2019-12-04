@@ -13,5 +13,5 @@ export function isArray(val: any): val is Array<any> {
 }
 
 export function isDef(val: any): Boolean {
-  return val !== null && val !== undefined
+  return val !== null && val !== undefined && val !== ''
 }
