@@ -15,3 +15,10 @@ export function isArray(val: any): val is Array<any> {
 export function isDef(val: any): Boolean {
   return val !== null && val !== undefined && val !== ''
 }
+
+export function extend<T, U>(to: T, from: U): T & U {
+  for (const key in from) {
+    ;(to as T & U)[key] = from[key] as any // 加分号防止压缩后变成函数调用
+  }
+  return to as T & U
+}

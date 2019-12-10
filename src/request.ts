@@ -24,7 +24,7 @@ export default function request(config: AxiosRequestConfig): AxiosPromise {
       xhr.timeout = timeout!
     }
 
-    xhr.open(method.toUpperCase(), url, async)
+    xhr.open(method.toUpperCase(), url!, async)
 
     xhr.onerror = function() {
       reject(createError(

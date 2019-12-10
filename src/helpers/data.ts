@@ -8,7 +8,7 @@ export function transformRequest(data: any): any {
 }
 
 export function transformResponse(data: any): any {
-  if (typeof data === 'string') {
+  if (typeof data === 'string' && data.trim() !== '') {
     try {
       data = JSON.parse(data)
     } catch (e) {
