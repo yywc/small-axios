@@ -5,6 +5,7 @@ import {
   Method
 } from '../types'
 import dispatchRequest from './dispatchRequest'
+import { isDef } from '../helpers/util'
 
 export default class Axios implements AxiosInterface {
   delete(url: string, config?: AxiosRequestConfig): AxiosPromise {
@@ -35,7 +36,15 @@ export default class Axios implements AxiosInterface {
     return this._requestMethodWithData('put', url, data, config)
   }
 
-  request(config: AxiosRequestConfig): AxiosPromise {
+  request(url: any, config?: any): AxiosPromise {
+    if (typeof url === 'string') {
+      if (!isDef(config)) {
+        config = {}
+      }
+      config.url = url
+    } else {
+      config = url
+    }
     return dispatchRequest(config)
   }
 
