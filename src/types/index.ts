@@ -9,6 +9,8 @@ export interface AxiosRequestConfig {
   responseType?: XMLHttpRequestResponseType
   timeout?: number
   async?: boolean
+
+  [propName: string]: any
 }
 
 export type Method = 'get' | 'GET'
@@ -45,6 +47,8 @@ export interface Interceptors {
 }
 
 export interface Axios {
+
+  defaults: AxiosRequestConfig
 
   interceptors: Interceptors
 

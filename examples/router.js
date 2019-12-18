@@ -101,4 +101,9 @@ router.get('/interceptor/get', function(req, res) {
   res.end('hello')
 })
 
+// default config
+router.post('/config/post', function(req, res) {
+  res.json(req.body)
+})
+
 module.exports = router
