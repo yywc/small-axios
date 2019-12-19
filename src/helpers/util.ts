@@ -18,7 +18,7 @@ export function isDef(val: any): Boolean {
 
 export function extend<T, U>(to: T, from: U): T & U {
   for (const key in from) {
-    ;(to as T & U)[key] = from[key] as any // 加分号防止压缩后变成函数调用
+    (to as T & U)[key] = from[key] as any
   }
   return to as T & U
 }

@@ -10,7 +10,14 @@ export interface AxiosRequestConfig {
   timeout?: number
   async?: boolean
 
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
+
   [propName: string]: any
+}
+
+export interface AxiosTransformer {
+  (data: any, headers?: any): any
 }
 
 export type Method = 'get' | 'GET'

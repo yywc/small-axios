@@ -96,10 +96,12 @@ router.get('/extend/user', function(req, res) {
   })
 })
 
+
 // interceptor
 router.get('/interceptor/get', function(req, res) {
   res.end('hello')
 })
+
 
 // default config
 router.post('/config/post', function(req, res) {
