@@ -12,7 +12,8 @@ export default function request(config: AxiosRequestConfig): AxiosPromise {
       headers,
       responseType,
       timeout,
-      async = true
+      async = true,
+      cancelToken
     } = config
     const xhr = new XMLHttpRequest()
 
@@ -90,6 +91,13 @@ export default function request(config: AxiosRequestConfig): AxiosPromise {
         xhr.setRequestHeader(key, headers[key])
       }
     })
+
+    if (isDef(cancelToken)) {
+      cancelToken?.promise.then(reason => {
+        xhr.abort()
+        reject(reason)
+      })
+    }
 
     xhr.send(data)
   })

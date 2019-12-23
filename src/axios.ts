@@ -1,9 +1,11 @@
-import { AxiosInstance, AxiosRequestConfig } from './types'
+import { AxiosRequestConfig, AxiosStatic } from './types'
 import Axios from './core/Axios'
 import { extend } from './helpers/util'
 import defaults from './defaults'
+import Cancel, { isCancel } from './cancel/Cancel'
+import CancelToken from './cancel/CancelToken'
 
-function createAxios(config: AxiosRequestConfig): AxiosInstance {
+function createAxios(config: AxiosRequestConfig): AxiosStatic {
   const context = new Axios(config)
 
   // 这样可以使得 axios 既可以用 Axios 里的方法，同时自身也可以调用
@@ -12,7 +14,13 @@ function createAxios(config: AxiosRequestConfig): AxiosInstance {
 
   extend(instance, context)
 
-  return instance as AxiosInstance
+  return instance as AxiosStatic
 }
 
-export default createAxios(defaults)
+const axios = createAxios(defaults)
+
+axios.isCancel = isCancel
+axios.Cancel = Cancel
+axios.CancelToken = CancelToken
+
+export default axios
