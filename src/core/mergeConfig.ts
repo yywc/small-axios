@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from '../types'
-import { deepMerge, isObject } from '../helpers/util'
+import { deepMerge, isDef, isObject } from '../helpers/util'
 
 const strategy = Object.create(null)
 
@@ -17,7 +17,7 @@ function specialMerge(t: any, s: any): any {
   }
 }
 
-['url', 'data', 'params'].forEach(key => {
+;['url', 'data', 'params'].forEach(key => {
   strategy[key] = specialMerge
 })
 
@@ -34,19 +34,23 @@ function objectMerge(t: any, s: any): any {
   }
 }
 
-['headers'].forEach(key => {
+;['headers'].forEach(key => {
   strategy[key] = objectMerge
 })
 
 export default function mergeConfig(
   target: AxiosRequestConfig,
-  source: AxiosRequestConfig
+  source?: AxiosRequestConfig
 ): AxiosRequestConfig {
+  if (!isDef(source)) {
+    source = {}
+  }
+
   const config = Object.create(null)
 
   const merge = function(key: string): void {
     const mergeFn = strategy[key] || strategy._default
-    config[key] = mergeFn(target[key], source[key])
+    config[key] = mergeFn(target[key], source![key])
   }
 
   // 合并所有自定义配置项
@@ -56,11 +60,10 @@ export default function mergeConfig(
 
   // 如果默认项中存在自定义配置项中没有的，则合并这一部分
   for (const key in target) {
-    if (!source[key]) {
+    if (!source![key]) {
       merge(key)
     }
   }
 
   return config
-
 }

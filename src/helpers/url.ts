@@ -22,20 +22,20 @@ function formatValue(value: any, key: string): [any[], string] {
   return [values, key]
 }
 
-export default function buildURL(url: string, params?: any): string {
+export function buildURL(url: string, params?: any): string {
   if (!isDef(params)) {
     return url
   }
 
   const parts: string[] = []
 
-  Object.keys(params).forEach((key) => {
+  Object.keys(params).forEach(key => {
     let value = params[key]
     if (!isDef(value)) {
       return
     }
     // 格式化 key、value
-    [value, key] = formatValue(value, key)
+    ;[value, key] = formatValue(value, key)
     value.forEach((val: any) => {
       // 日期、对象特殊处理
       if (isDate(val)) {
@@ -58,4 +58,28 @@ export default function buildURL(url: string, params?: any): string {
     url += (url.indexOf('?') !== -1 ? '&' : '?') + serializedParams
   }
   return url
+}
+
+interface URLOrigin {
+  protocol: string
+  host: string
+}
+
+const urlParseNode = document.createElement('a')
+const currentOrigin = resolveURL(window.location.href)
+
+function resolveURL(url: string): URLOrigin {
+  urlParseNode.setAttribute('href', url)
+  const { protocol, host } = urlParseNode
+  return {
+    protocol,
+    host
+  }
+}
+
+export function isURLSameOrigin(requestURL: string): boolean {
+  const parsedOrigin = resolveURL(requestURL)
+  return (
+    parsedOrigin.protocol === currentOrigin.protocol && parsedOrigin.host === currentOrigin.host
+  )
 }

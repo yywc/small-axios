@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const WebpackConfig = require('./webpack.config')
-const router = require('./router');
+const router = require('./router')
 
 require('./server2')
 
@@ -17,6 +17,12 @@ app.use(webpackDevMiddleware(compiler, {
   stats: {
     colors: true,
     chunks: false
+  }
+}))
+
+app.use(express.static(__dirname, {
+  setHeaders(res) {
+    res.cookie('XSRF-TOKEN-D', '1234abc')
   }
 }))
 
