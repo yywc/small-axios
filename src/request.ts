@@ -1,9 +1,23 @@
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from './types'
-import { isDef } from './helpers/util'
+import { isDef, isFormData } from './helpers/util'
 import { parseHeaders } from './helpers/header'
 import { createError } from './helpers/error'
 import { isURLSameOrigin } from './helpers/url'
 import cookie from './helpers/cookie'
+
+// function registerRequest(): void {
+//   const xhr = new XMLHttpRequest()
+//
+//   xhr.open(method.toUpperCase(), url!, async)
+//
+//   xhr.onerror = function() {
+//     reject(createError('Network Error', config, null, request))
+//   }
+//
+//   xhr.ontimeout = function() {
+//     reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', request))
+//   }
+// }
 
 export default function request(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
@@ -18,30 +32,48 @@ export default function request(config: AxiosRequestConfig): AxiosPromise {
       withCredentials,
       xsrfCookieName,
       xsrfHeaderName,
+      onDownloadProgress,
+      onUploadProgress,
       async = true
     } = config
     const xhr = new XMLHttpRequest()
 
-    xhr.open(method.toUpperCase(), url!, async)
+    function processRequest(): void {
+      if (isDef(responseType)) {
+        xhr.responseType = responseType!
+      }
 
-    if (isDef(responseType)) {
-      xhr.responseType = responseType!
-    }
+      if (isDef(timeout)) {
+        xhr.timeout = timeout!
+      }
 
-    if (isDef(timeout)) {
-      xhr.timeout = timeout!
-    }
+      if (withCredentials) {
+        xhr.withCredentials = withCredentials
+      }
 
-    if (withCredentials) {
-      xhr.withCredentials = withCredentials
-    }
+      if ((withCredentials || isURLSameOrigin(url!)) && xsrfCookieName) {
+        const xsrfValue = cookie.read(xsrfCookieName)
+        if (xsrfValue) {
+          headers[xsrfHeaderName!] = xsrfValue
+        }
+      }
 
-    if ((withCredentials || isURLSameOrigin(url!)) && xsrfCookieName) {
-      const xsrfValue = cookie.read(xsrfCookieName)
-      if (xsrfValue) {
-        headers[xsrfHeaderName!] = xsrfValue
+      if (isDef(onDownloadProgress)) {
+        xhr.onprogress = onDownloadProgress!
+      }
+
+      if (isDef(onUploadProgress)) {
+        xhr.upload.onprogress = onUploadProgress!
+      }
+
+      if (isFormData(data)) {
+        delete headers['Content-Type']
       }
     }
+
+    xhr.open(method.toUpperCase(), url!, async)
+
+    processRequest()
 
     xhr.onerror = function() {
       reject(createError('Network Error', config, null, request))

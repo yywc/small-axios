@@ -12,7 +12,7 @@ export function transformResponse(data: any): any {
     try {
       data = JSON.parse(data)
     } catch (e) {
-      console.error('Data transform error: ' + e)
+      // do nothing
     }
   }
   return data

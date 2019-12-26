@@ -6,11 +6,17 @@ const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const WebpackConfig = require('./webpack.config')
 const router = require('./router')
+const path = require('path')
 
 require('./server2')
 
 const app = express()
 const compiler = webpack(WebpackConfig)
+
+const multipart = require('connect-multiparty')
+app.use(multipart({
+  uploadDir: path.resolve(__dirname, 'upload-file')
+}))
 
 app.use(webpackDevMiddleware(compiler, {
   publicPath: '/__build__/',

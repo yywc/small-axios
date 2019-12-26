@@ -18,7 +18,7 @@ export function isDef(val: any): Boolean {
 
 export function extend<T, U>(to: T, from: U): T & U {
   for (const key in from) {
-    (to as T & U)[key] = from[key] as any
+    ;(to as T & U)[key] = from[key] as any
   }
   return to as T & U
 }
@@ -43,4 +43,8 @@ export function deepMerge(...objs: any[]): any {
   })
 
   return result
+}
+
+export function isFormData(val: any): boolean {
+  return typeof val !== 'undefined' && val instanceof FormData
 }

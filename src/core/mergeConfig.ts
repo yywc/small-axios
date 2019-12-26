@@ -43,7 +43,7 @@ export default function mergeConfig(
   source?: AxiosRequestConfig
 ): AxiosRequestConfig {
   if (!isDef(source)) {
-    source = {}
+    source = {} as AxiosRequestConfig
   }
 
   const config = Object.create(null)

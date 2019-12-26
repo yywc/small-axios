@@ -27,11 +27,6 @@ router.options('/more/server2', function(req, res) {
   res.end()
 })
 
-router.get('/more/server2', function(req, res) {
-  res.json(req.cookies)
-// res.json({test: 'abc'})
-})
-
 app.use(router)
 
 const port = 8088

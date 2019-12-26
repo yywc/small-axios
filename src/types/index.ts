@@ -20,6 +20,10 @@ export interface AxiosRequestConfig {
   xsrfCookieName?: string
   xsrfHeaderName?: string
 
+  onDownloadProgress?(e: ProgressEvent): void
+
+  onUploadProgress?(e: ProgressEvent): void
+
   [propName: string]: any
 }
 
@@ -148,5 +152,6 @@ export interface AxiosStatic extends AxiosInstance {
 
   CancelToken: CancelTokenStatic
   Cancel: CancelStatic
-  isCancel: (value: any) => boolean
+
+  isCancel(value: any): boolean
 }
