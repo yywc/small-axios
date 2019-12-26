@@ -15,6 +15,8 @@ export interface AxiosRequestConfig {
 
   cancelToken?: CancelToken
 
+  withCredentials?: boolean
+
   [propName: string]: any
 }
 
@@ -37,13 +39,21 @@ export interface AxiosTransformer {
   (data: any, headers?: any): any
 }
 
-export type Method = 'get' | 'GET'
-  | 'delete' | 'Delete'
-  | 'head' | 'HEAD'
-  | 'options' | 'OPTIONS'
-  | 'post' | 'POST'
-  | 'put' | 'PUT'
-  | 'patch' | 'PATCH'
+export type Method =
+  | 'get'
+  | 'GET'
+  | 'delete'
+  | 'Delete'
+  | 'head'
+  | 'HEAD'
+  | 'options'
+  | 'OPTIONS'
+  | 'post'
+  | 'POST'
+  | 'put'
+  | 'PUT'
+  | 'patch'
+  | 'PATCH'
 
 export interface AxiosResponse<T = any> {
   data: T
@@ -54,8 +64,7 @@ export interface AxiosResponse<T = any> {
   request: any
 }
 
-export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> {
-}
+export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> {}
 
 export interface AxiosError extends Error {
   config: AxiosRequestConfig
@@ -66,12 +75,11 @@ export interface AxiosError extends Error {
 }
 
 export interface Interceptors {
-  request: InterceptorManager<AxiosRequestConfig>,
+  request: InterceptorManager<AxiosRequestConfig>
   response: InterceptorManager<AxiosResponse>
 }
 
 export interface Axios {
-
   defaults: AxiosRequestConfig
 
   interceptors: Interceptors
@@ -119,7 +127,7 @@ export interface CancelTokenSource {
 }
 
 export interface CancelTokenStatic {
-  new(executor: CancelExecutor): CancelToken
+  new (executor: CancelExecutor): CancelToken
 
   source(): CancelTokenSource
 }
@@ -129,7 +137,7 @@ export interface Cancel {
 }
 
 export interface CancelStatic {
-  new(message?: string): Cancel
+  new (message?: string): Cancel
 }
 
 export interface AxiosStatic extends AxiosInstance {

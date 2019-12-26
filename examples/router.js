@@ -122,4 +122,10 @@ router.post('/cancel/post', function(req, res) {
   }, 1000)
 })
 
+
+// more
+router.get('/more/get', function(req, res) {
+  res.json(req.cookies)
+})
+
 module.exports = router

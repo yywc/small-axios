@@ -12,10 +12,13 @@ export default function request(config: AxiosRequestConfig): AxiosPromise {
       headers,
       responseType,
       timeout,
-      async = true,
-      cancelToken
+      cancelToken,
+      withCredentials,
+      async = true
     } = config
     const xhr = new XMLHttpRequest()
+
+    xhr.open(method.toUpperCase(), url!, async)
 
     if (isDef(responseType)) {
       xhr.responseType = responseType!
@@ -25,38 +28,28 @@ export default function request(config: AxiosRequestConfig): AxiosPromise {
       xhr.timeout = timeout!
     }
 
-    xhr.open(method.toUpperCase(), url!, async)
+    if (withCredentials) {
+      xhr.withCredentials = withCredentials
+    }
 
     xhr.onerror = function() {
-      reject(createError(
-        'Network Error',
-        config,
-        null,
-        request
-      ))
+      reject(createError('Network Error', config, null, request))
     }
 
     xhr.ontimeout = function() {
-      reject(createError(
-        `Timeout of ${timeout} ms exceeded`,
-        config,
-        'ECONNABORTED',
-        request
-      ))
+      reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', request))
     }
 
     xhr.onreadystatechange = function() {
-      const isNotSuccess = xhr.readyState !== XMLHttpRequest.DONE
-        || xhr.status === 0
+      const isNotSuccess = xhr.readyState !== XMLHttpRequest.DONE || xhr.status === 0
 
       if (isNotSuccess) {
         return
       }
 
       const responseHeaders = parseHeaders(xhr.getAllResponseHeaders())
-      const responseData = (isDef(responseType) && responseType !== 'text')
-        ? xhr.response
-        : xhr.responseText
+      const responseData =
+        isDef(responseType) && responseType !== 'text' ? xhr.response : xhr.responseText
 
       const response: AxiosResponse = {
         data: responseData,
@@ -71,20 +64,22 @@ export default function request(config: AxiosRequestConfig): AxiosPromise {
         if (response.status >= 200 && response.status < 300) {
           resolve(response)
         } else {
-          reject(createError(
-            `Request failed with status code ${response.status}`,
-            config,
-            null,
-            request,
-            response
-          ))
+          reject(
+            createError(
+              `Request failed with status code ${response.status}`,
+              config,
+              null,
+              request,
+              response
+            )
+          )
         }
       }
 
       handleResponse(response)
     }
 
-    Object.keys(headers).forEach((key) => {
+    Object.keys(headers).forEach(key => {
       if (!isDef(data) && key.toLowerCase() === 'content-type') {
         delete headers[key]
       } else {

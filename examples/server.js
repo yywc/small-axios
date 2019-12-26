@@ -1,10 +1,13 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const webpack = require('webpack')
+const cookieParser = require('cookie-parser')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const WebpackConfig = require('./webpack.config')
 const router = require('./router');
+
+require('./server2')
 
 const app = express()
 const compiler = webpack(WebpackConfig)
@@ -23,6 +26,7 @@ app.use(express.static(__dirname))
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieParser())
 
 app.use(router)
 
