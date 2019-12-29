@@ -34,7 +34,7 @@ function objectMerge(t: any, s: any): any {
   }
 }
 
-;['headers'].forEach(key => {
+;['headers', 'auth'].forEach(key => {
   strategy[key] = objectMerge
 })
 

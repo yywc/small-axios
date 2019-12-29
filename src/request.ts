@@ -5,20 +5,6 @@ import { createError } from './helpers/error'
 import { isURLSameOrigin } from './helpers/url'
 import cookie from './helpers/cookie'
 
-// function registerRequest(): void {
-//   const xhr = new XMLHttpRequest()
-//
-//   xhr.open(method.toUpperCase(), url!, async)
-//
-//   xhr.onerror = function() {
-//     reject(createError('Network Error', config, null, request))
-//   }
-//
-//   xhr.ontimeout = function() {
-//     reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', request))
-//   }
-// }
-
 export default function request(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
     const {
@@ -34,6 +20,7 @@ export default function request(config: AxiosRequestConfig): AxiosPromise {
       xsrfHeaderName,
       onDownloadProgress,
       onUploadProgress,
+      auth,
       async = true
     } = config
     const xhr = new XMLHttpRequest()
@@ -68,6 +55,10 @@ export default function request(config: AxiosRequestConfig): AxiosPromise {
 
       if (isFormData(data)) {
         delete headers['Content-Type']
+      }
+
+      if (isDef(auth)) {
+        headers['Authorization'] = 'Basic ' + btoa(auth?.username + ':' + auth?.password)
       }
     }
 
