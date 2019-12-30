@@ -1,4 +1,4 @@
-import { isDate, isObject, isDef, isArray } from './util'
+import { isDate, isObject, isDef, isArray, isURLSearchParams } from './util'
 
 function encode(val: string): string {
   return encodeURI(val)
@@ -22,32 +22,44 @@ function formatValue(value: any, key: string): [any[], string] {
   return [values, key]
 }
 
-export function buildURL(url: string, params?: any): string {
+export function buildURL(
+  url: string,
+  params?: any,
+  paramsSerializer?: (params: any) => string
+): string {
   if (!isDef(params)) {
     return url
   }
 
-  const parts: string[] = []
+  let serializedParams
 
-  Object.keys(params).forEach(key => {
-    let value = params[key]
-    if (!isDef(value)) {
-      return
-    }
-    // 格式化 key、value
-    ;[value, key] = formatValue(value, key)
-    value.forEach((val: any) => {
-      // 日期、对象特殊处理
-      if (isDate(val)) {
-        val = val.toISOString()
-      } else if (isObject(val)) {
-        val = JSON.stringify(val)
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params)
+  } else if (isURLSearchParams(params)) {
+    serializedParams = params.toString()
+  } else {
+    const parts: string[] = []
+
+    Object.keys(params).forEach(key => {
+      let value = params[key]
+      if (!isDef(value)) {
+        return
       }
-      parts.push(`${encode(key)}=${encode(val)}`)
+      // 格式化 key、value
+      ;[value, key] = formatValue(value, key)
+      value.forEach((val: any) => {
+        // 日期、对象特殊处理
+        if (isDate(val)) {
+          val = val.toISOString()
+        } else if (isObject(val)) {
+          val = JSON.stringify(val)
+        }
+        parts.push(`${encode(key)}=${encode(val)}`)
+      })
     })
-  })
+    serializedParams = parts.join('&')
+  }
   // 组合参数
-  const serializedParams = parts.join('&')
   if (isDef(serializedParams)) {
     // 去除 hash 部分
     const hashIndex = url.indexOf('#')
