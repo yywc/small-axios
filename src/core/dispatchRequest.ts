@@ -1,11 +1,14 @@
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from '../types'
-import { buildURL } from '../helpers/url'
+import { buildURL, combineURL, isAbsoluteURL } from '../helpers/url'
 import { flattenHeaders } from '../helpers/header'
 import request from '../request'
 import transform from './transform'
 
 function transformUrl(config: AxiosRequestConfig): string {
-  const { url, params, paramsSerializer } = config
+  let { url, params, paramsSerializer, baseURL } = config
+  if (baseURL && !isAbsoluteURL(url!)) {
+    url = combineURL(baseURL, url!)
+  }
   return buildURL(url!, params, paramsSerializer)
 }
 
