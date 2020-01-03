@@ -32,7 +32,15 @@ function throwIfCancellationRequested(config: AxiosRequestConfig): void {
 export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
   throwIfCancellationRequested(config)
   processConfig(config)
-  return request(config).then(res => {
-    return transformResponseData(res)
-  })
+  return request(config).then(
+    res => {
+      return transformResponseData(res)
+    },
+    e => {
+      if (e && e.response) {
+        e.response = transformResponseData(e.response)
+      }
+      return Promise.reject(e)
+    }
+  )
 }

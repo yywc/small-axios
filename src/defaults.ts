@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from './types'
-import { processHeader } from './helpers/header'
+import { processHeaders } from './helpers/header'
 import { transformRequest, transformResponse } from './helpers/data'
 
 const defaults: AxiosRequestConfig = {
@@ -12,7 +12,7 @@ const defaults: AxiosRequestConfig = {
   },
   transformRequest: [
     function(data: any, headers?: any): any {
-      processHeader(headers, data)
+      processHeaders(headers, data)
       return transformRequest(data)
     }
   ],

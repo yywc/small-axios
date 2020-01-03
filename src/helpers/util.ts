@@ -31,9 +31,9 @@ export function deepMerge(...objs: any[]): any {
       for (const [key, value] of Object.entries(obj)) {
         if (isObject(value)) {
           if (isObject(result[key])) {
-            deepMerge(result[key], value)
+            result[key] = deepMerge(result[key], value)
           } else {
-            result[key] = deepMerge({}, value)
+            result[key] = deepMerge(value)
           }
         } else {
           result[key] = value

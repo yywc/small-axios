@@ -69,6 +69,7 @@ export default class Axios implements AxiosInterface {
       config = url
     }
     config = mergeConfig(this.defaults, config)
+    config.method = config.method.toLowerCase()
 
     const chain: PromiseChain[] = [
       {
