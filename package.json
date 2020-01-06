@@ -1,14 +1,14 @@
 {
-  "name": "ts-axios",
+  "name": "ts-axios-yywc",
   "version": "1.0.0",
   "description": "demo of smaller axios",
   "keywords": [
     "axios",
     "typescript"
   ],
-  "main": "dist/ts-axios.umd.js",
-  "module": "dist/ts-axios.es5.js",
-  "typings": "dist/types/ts-axios.d.ts",
+  "main": "dist/ts-axios-yywc.umd.js",
+  "module": "dist/ts-axios-yywc.es5.js",
+  "typings": "dist/types/ts-axios-yywc.d.ts",
   "files": [
     "dist"
   ],
@@ -36,7 +36,9 @@
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
     "precommit": "lint-staged",
     "travis-deploy-once": "travis-deploy-once",
-    "dev": "node examples/server.js"
+    "dev": "node examples/server.js",
+    "prepub": "npm run test:prod && npm run build",
+    "pub": "sh release.sh"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [

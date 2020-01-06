@@ -1,8 +1,4 @@
-import {
-  Canceler,
-  CancelExecutor,
-  CancelTokenSource
-} from '../types'
+import { Canceler, CancelExecutor, CancelTokenSource } from '../types'
 import Cancel from './Cancel'
 import { isDef } from '../helpers/util'
 
@@ -42,7 +38,7 @@ export default class CancelToken {
         return
       }
       this.reason = new Cancel(message)
-      resolvePromise(this.reason!)
+      resolvePromise(this.reason)
     })
   }
 }
