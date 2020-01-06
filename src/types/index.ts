@@ -91,7 +91,7 @@ export interface AxiosError extends Error {
   code?: string
   request?: any
   response?: AxiosResponse
-  isAxiosError: symbol
+  isAxiosError: boolean
 }
 
 export interface Interceptors {

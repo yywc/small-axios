@@ -68,11 +68,11 @@ export default function request(config: AxiosRequestConfig): AxiosPromise {
     processRequest()
 
     xhr.onerror = function() {
-      reject(createError('Network Error', config, null, request))
+      reject(createError('Network Error', config, null, xhr))
     }
 
     xhr.ontimeout = function() {
-      reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', request))
+      reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', xhr))
     }
 
     xhr.onreadystatechange = function() {
@@ -104,7 +104,7 @@ export default function request(config: AxiosRequestConfig): AxiosPromise {
               `Request failed with status code ${response.status}`,
               config,
               null,
-              request,
+              xhr,
               response
             )
           )
